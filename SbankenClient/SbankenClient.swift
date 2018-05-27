@@ -150,9 +150,9 @@ public class SbankenClient: NSObject {
             completion(tokenManager.token!)
             return
         }
-        let clientIdEncoded = clientId.encodeUrl()!
+        let clientIdEncoded = clientId.urlEncoded()!
         
-        var clienSecretdEncoded = secret.encodeUrl()!
+        var clienSecretdEncoded = secret.urlEncoded()!
         clienSecretdEncoded = clienSecretdEncoded.replacingOccurrences(of: "+", with: "%2B")
         let credentialData = "\(clientIdEncoded):\(clienSecretdEncoded)".data(using: .utf8)!
         let encodedCredentials = credentialData.base64EncodedString()
