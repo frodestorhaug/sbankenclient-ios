@@ -151,7 +151,7 @@ public class SbankenClient: NSObject {
             return
         }
         
-        let credentialData = "\(clientId):\(secret)".data(using: .utf8)!
+	let credentialData = "\(String(describing: clientId.addingPercentEncodingForURLQueryValue())):\(String(describing: secret.addingPercentEncodingForURLQueryValue()))".data(using: .utf8)!
         let encodedCredentials = credentialData.base64EncodedString()
         
         let url = URL(string: "\(Constants.baseUrl)/identityserver/connect/token")
