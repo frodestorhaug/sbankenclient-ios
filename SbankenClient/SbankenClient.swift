@@ -43,6 +43,7 @@ public class SbankenClient: NSObject {
             self.urlSession.dataTask(with: request, completionHandler: { (data, response, error) in
                 guard data != nil, error == nil else {
                     failure(error)
+                    print(error?.localizedDescription ?? "error")
                     return
                 }
                 
@@ -50,6 +51,7 @@ public class SbankenClient: NSObject {
                     success(accountsResponse.items)
                 } else {
                     failure(nil)
+                    print("failure decoding")
                 }
             }).resume()
         }
