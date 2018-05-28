@@ -36,7 +36,7 @@ public class SbankenClient: NSObject {
                 return
             }
             
-            let urlString = "\(Constants.baseUrl)/Bank/api/v1/Accounts/\(userId)"
+            let urlString = "\(Constants.baseUrl)/Bank/api/v1/Accounts"
             
             guard var request = self.urlRequest(urlString, token: token!) else { return }
             request.setValue(userId, forHTTPHeaderField: "customerId")
