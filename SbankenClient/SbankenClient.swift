@@ -37,8 +37,9 @@ public class SbankenClient: NSObject {
             }
             
             let urlString = "\(Constants.baseUrl)/Bank/api/v1/Accounts/\(userId)"
-            guard let request = self.urlRequest(urlString, token: token!) else { return }
             
+            guard var request = self.urlRequest(urlString, token: token!) else { return }
+            request.setValue(userId, forHTTPHeaderField: "customerId")
             self.urlSession.dataTask(with: request, completionHandler: { (data, response, error) in
                 guard data != nil, error == nil else {
                     failure(error)
@@ -69,8 +70,9 @@ public class SbankenClient: NSObject {
                 "endDate": formatter.string(from: endDate)
                 ] as [String : Any]
 
-            let urlString = "\(Constants.baseUrl)/Bank/api/v2/Transactions/\(userId)/\(accountNumber)"
-            guard let request = self.urlRequest(urlString, token: token!, parameters: parameters) else { return }
+            let urlString = "\(Constants.baseUrl)/Bank/api/v1/Transactions/\(accountNumber)"
+            guard var request = self.urlRequest(urlString, token: token!, parameters: parameters) else { return }
+            request.setValue(userId, forHTTPHeaderField: "customerId")
             
             self.urlSession.dataTask(with: request, completionHandler: { (data, response, error) in
                 guard data != nil, error == nil else {
@@ -96,7 +98,6 @@ public class SbankenClient: NSObject {
             
             let urlString = "\(Constants.baseUrl)/Bank/api/v1/Transfers/\(userId)"
             guard var request = self.urlRequest(urlString, token: token!) else { return }
-            
             let transferRequest = TransferRequest(fromAccount: fromAccount, toAccount: toAccount, message: message, amount: amount)
             
             request.httpMethod = "POST"
@@ -156,7 +157,7 @@ public class SbankenClient: NSObject {
         clienSecretdEncoded = clienSecretdEncoded.replacingOccurrences(of: "+", with: "%2B")
         let credentialData = "\(clientIdEncoded):\(clienSecretdEncoded)".data(using: .utf8)!
         let encodedCredentials = credentialData.base64EncodedString()
-        
+        print(encodedCredentials)
         let url = URL(string: "\(Constants.baseUrl)/identityserver/connect/token")
         var request = URLRequest(url: url!)
         
