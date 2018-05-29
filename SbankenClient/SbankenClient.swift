@@ -43,7 +43,9 @@ public class SbankenClient: NSObject {
             self.urlSession.dataTask(with: request, completionHandler: { (data, response, error) in
                 guard data != nil, error == nil else {
                     failure(error)
+                    #if DEBUG
                     print(error?.localizedDescription ?? "error")
+                    #endif
                     return
                 }
                 
@@ -51,7 +53,9 @@ public class SbankenClient: NSObject {
                     success(accountsResponse.items)
                 } else {
                     failure(nil)
+                    #if DEBUG
                     print("failure decoding")
+                    #endif
                 }
             }).resume()
         }
@@ -104,6 +108,7 @@ public class SbankenClient: NSObject {
             
             request.httpMethod = "POST"
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue(userId, forHTTPHeaderField: "customerId")
             
             if let body = try? self.encoder.encode(transferRequest) {
                 request.httpBody = body
